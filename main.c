@@ -1,72 +1,121 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define HEIGHT 20
-#define WIDTH 70
+#include <stdbool.h>
 
-struct user_input
+struct canvas
 {
-    int low;
-    int col;
-    char word;
+    char user_input = ' ';
+    char array[20][71];
 };
 
-void print_guide()
+void printing(struct canvas *show_setting)
 {
-    for(int h = 0; h <= HEIGHT + 1; h++)
+    for(int col = 0; col <= 20; col++)
     {
-        if(h <= 1)
+        if(col <= 1)
             printf("**");
 
         else
+            printf("%2d", col - 1);
+
+        for(int low = 0; low <= 70; low++)
         {
-            if(h <= 10)
-                printf("0");
+            if(col == 0)
+                printf("%d", (low + 1) % 10);
 
-            printf("%d", h - 1);
-
-        }
-
-        for(int w = 0; w < WIDTH; w++)
-        {
-            if(h == 0)
-                printf("%d", w % 10);
-
-            else if(h == 1)
+            else if(col == 1)
                 printf("*");
 
             else
-                printf("%c", canvas[h - 2][w]);
+                printf("%c", show_setting -> array[col][low]);
         }
-
         printf("\n");
     }
 }
 
-int main()
+void save_file()
 {
-    char canvas[20][71];
 
-    for(int low = 0; low < HEIGHT; low++)
-        for(int col = 0; col < WIDTH; col++)
-            canvas[low][col] = ' ';
+}
 
-    int mode;
+void initialize(struct canvas *array)
+{
+    for(int col = 0; col <= 19; col++)
+        for(int low = 0; low <= 70; low++)
+            array -> array[col][low] = '_';
+}
 
-    struct user_input user = {0, 0, ' '};
+int main() {
+    struct canvas setting;
 
-    //¹İº¹¹® ÇÊ¿ä
-    print_guide();
+    char user_input, mode_select;
+    int x, y;
 
-    printf("\n»ç¿ëÇÒ ±â´ÉÀ» ¼±ÅÃÇØÁÖ¼¼¿ä.\n");
-    printf("1.±×¸®±â 2.Áö¿ì±â 3.ÀúÀåÇÏ±â 4.ºÒ·¯¿À±â 5.»õ È­¸é 6.Á¾·á\n");
-    scanf("%d", &mode);
+    initialize(&setting);
 
-    if(mode == 1)
-    {
-        system("cls");
-        printf("¾î´À À§Ä¡¿¡ Á¡À» ÂïÀ»±î¿ä?(ÀÔ·Â ¹æ½Ä: °¡·Î ¼¼·Î ¹®ÀÚ)\n");
-        scanf("%d %d %s", &user.low, &user.col, &user.word);
+    while (true) {
+        printing(&setting);
 
-        canvas[user.low][user.col] = user.word;
+        while(true)
+        {
+            printf("\nì‚¬ìš©í•  ê¸°ëŠ¥ì„ ì„ íƒí•´ì£¼ì„¸ìš”.\n");
+            printf("1.ê·¸ë¦¬ê¸° 2.ì§€ìš°ê¸° 3.ì €ì¥í•˜ê¸° 4.ë¶ˆëŸ¬ì˜¤ê¸° 5.ìƒˆ í™”ë©´ 6.ì¢…ë£Œ\n");
+
+            scanf("%c", &mode_select);
+
+            if (mode_select == '1')
+            {
+                printf("ì–´ë–¤ ë¬¸ìë¥¼ í‘œì‹œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?\n");
+                scanf("%c", &user_input);
+
+                printf("ë©”ë‰´ë¥¼ ê³¨ë¼ì£¼ì„¸ìš”.\n");
+                printf("1.ìœ„ì¹˜ ì§€ì • 2.ì„  3.ë„í˜•\n");
+
+                scanf("%d", &drow_mode);
+
+                printf("ì–´ë””ì— ë¬¸ìë¥¼ í‘œì‹œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?\n ì…ë ¥ ì˜ˆì‹œ : ê°€ë¡œ ì„¸ë¡œ\n");
+                scanf("%d %d", &x, &y);
+
+                setting.array[x][y] = user_input;
+
+                break;
+            }
+            else if (mode_select == '2')
+            {
+                printf("ì–´ë””ì— ë¬¸ìë¥¼ í‘œì‹œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?\n ì…ë ¥ ì˜ˆì‹œ : ê°€ë¡œ ì„¸ë¡œ\n");
+                scanf("%d %d", &x, &y);
+
+                setting.array[x][y] = ' ';
+                break;
+            }
+
+            else if (mode_select == '3')
+            {
+                printf("ì €ì¥í•˜ê¸° ë§Œë“¤ê¸°");
+                break;
+            }
+
+            else if (mode_select == '4')
+            {
+                printf("ë¶ˆëŸ¬ì˜¤ê¸° ë§Œë“¤ê¸°");
+            }
+
+            else if (mode_select == '5')
+            {
+                initialize(&setting);
+                break;
+            }
+
+            else if (mode_select == '6')
+                break;
+
+            else
+                printf("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”.\n");
+        }
+
+        if(mode_select == '6')
+            break;
+
+
     }
 }
