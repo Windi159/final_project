@@ -41,9 +41,17 @@ void printing(struct canvas *show_setting)
     }
 }
 
-void save_file()
+void save_file(struct canvas *save_setting)
 {
-    
+    FILE* user_text_file;
+    char user_named_file[] = {};
+
+    printf("파일 이름을 정해주세요\n");
+    scanf("%s", user_named_file);
+
+    user_text_file = fopen(user_named_file, "w");
+    for(int col = 0; col < 20; col++)
+        fwrite(save_setting -> array[col], 1, sizeof(char), user_text_file);
 }
 
 void initialize(struct canvas *array)
@@ -97,7 +105,7 @@ int main() {
 
             else if (mode_select == '3')
             {
-                printf("저장하기 만들기");
+                save_file(&setting);
                 break;
             }
 
