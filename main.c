@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <windows.h>
 
-#define EMPTY '_'
+#define EMPTY ' '
 
 struct canvas
 {
@@ -44,7 +43,7 @@ void printing(struct canvas *show_setting)
 
 void save_file()
 {
-
+    
 }
 
 void initialize(struct canvas *array)
@@ -75,9 +74,9 @@ int main() {
             if (mode_select == '1')
             {
                 printf("어떤 문자를 표시하시겠습니까?\n");
-                scanf(" %s", &setting.user_input);
+                scanf(" %c", &setting.user_input);
 
-                printf("어디에 문자를 표시하시겠습니까?\n입력 예시 : 가로 세로 ");
+                printf("어디에 문자를 표시하시겠습니까?\n입력 예시 : 가로 세로\n");
                 scanf(" %d %d", &x, &y);
 
                 setting.array[y - 1][x - 1] = setting.user_input;
@@ -88,7 +87,7 @@ int main() {
 
             else if (mode_select == '2')
             {
-                printf("어디에 문자를 표시하시겠습니까?\n입력 예시 : 가로 세로 ");
+                printf("어디에 문자를 지우시겠습니까?\n입력 예시 : 가로 세로\n");
                 scanf(" %d %d", &x, &y);
 
                 setting.array[y - 1][x - 1] = EMPTY;
