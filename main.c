@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
+#include <stdbool.h>    //0과 1을 true와 false로 표현하기 위해 선언
 #include <io.h>
 
 #define EMPTY ' '
@@ -11,107 +11,69 @@ struct canvas
     char array[20][71];
 };
 
-void printing(struct canvas *show_setting)
+void printing(struct canvas *show_setting) //화면에 array를 출력하는 부분
 {
-    for(int col = 0; col <= 21; col++)
+    for(int row = 0; row <= 21; row++)  //array는 19가 최대 값이지만, 1234564890 와 ****를 표현하기 위해 21
     {
-        if(col <= 1)
+        if(row <= 1)    //2번째줄까지 **가 공통적으로 들어가므로 1보다 작을때 **출력하도록 설정
             printf("**");
 
         else
         {
-            if(col <= 10)
+            if(row <= 10)    //10이 넘어가지 않는다면 숫자 앞에 0을 출력
                 printf("0");
 
-            printf("%d", col - 1);
+            printf("%d", row - 1);    //숫자 출력
         }
 
 
-        for(int low = 0; low < 70; low++)
+        for(int col = 0; col < 70; col++)
         {
-            if(col == 0)
-                printf("%d", (low + 1) % 10);
+            if(row == 0)
+                printf("%d", (col + 1) % 10);    //1234567890를 표현하기위해 
 
-            else if(col == 1)
-                printf("*");
+            else if(row == 1)
+                printf("*");    //1번째 줄에 *******.. 를 출력하기
 
             else
-                printf("%c", show_setting -> array[col - 2][low]);
+                printf("%c", show_setting -> array[row - 2][col]);    //array값 출력
         }
         printf("\n");
-    }
-}
-
-void crete_txt(char *file_name, int *length)
-{
-    if(*length <= 4)
-    {
-        *(file_name + 1 + *length) = '.';
-        *(file_name + 2 + *length) = 't';
-        *(file_name + 3 + *length) = 'x';
-        *(file_name + 4 + *length) = 't';
-
-        *length += 4;
-    }
-
-    else
-    {
-        if(*(file_name - 3 + *length) != '.' && *(file_name - 2 + *length) != 't' && *(file_name - 1 + *length) != 'x' && *(file_name + *length) != 't')
-        {
-            if(*length > 77)
-                realloc(file_name, -(*length - 81) + 81);
-
-            *(file_name + *length - 3) = '.';
-            *(file_name + *length - 2) = 't';
-            *(file_name + *length - 1) = 'x';
-            *(file_name + *length) = 't';
-
-            *length += -(*length - 80) + 80;
-        }
     }
 }
 
 void save_file(struct canvas *save_setting, char *named_file, int size)
 {
     FILE* user_text_file;
-    char input[1420] = {};
     char name[size];
 
     for(int i = 0; i <= size; i++)
-        name[i] = *(named_file + i);
+        name[i] = *(named_file + i);    //named_file이 주솟값 이므로 name에 named_file의 값 저장
 
-    user_text_file = fopen(named_file, "w");
+    user_text_file = fopen(named_file, "w");    //파일을 쓰기 모드로 열기
 
-    for(int col = 0; col < 20; col++)
-        for(int low = 0; low <= 70; low++)
-            input[(71 * col) + low] = save_setting -> array[col][low];
+    save_setting -> array[19][70] = '\0';    //마지막(20번째줄 71번 칸?)는 null문자 삽입 
+    fprintf(user_text_file, save_setting -> array);    //파일에 array의 값을 저장
 
-    input[1419] = '\0';
-
-    fputs(input, user_text_file);
-    fclose(user_text_file);
+    fclose(user_text_file);    //파일 닫기
 }
 
 void naming_file(struct canvas *file_setting)
 {
-    char *user_named_file;
+    char user_named_file[80] = {};
     char override;
     int len = 0;
 
-    user_named_file = calloc(81 ,  sizeof(char));
-
     printf("파일 이름을 정해주세요. 이름의 최대 길이는 80입니다.\n");
-    scanf( "%s", user_named_file);
+    scanf( " %s", user_named_file);
 
     while(user_named_file[len] != '\0')
         len++;
 
-    char file_name = crete_txt(user_named_file, &len);
-
-    if(_access(user_named_file, 0) != 0)
+    if(_access(user_named_file, 0) != 0)    // 프로젝트 파일 안에 user_named_file이라는 파일이 없다면
         save_file(file_setting, user_named_file, len);
 
-    else
+    else    // 프로젝트 파일 안에 user_named_file이라는 파일이 있다면
     {
         while(true)
         {
@@ -135,26 +97,17 @@ void naming_file(struct canvas *file_setting)
                 continue;
         }
     }
-
 }
 
 void initialize(struct canvas *array)
 {
-    for(int col = 0; col <= 19; col++)
+    for(int row = 0; row <= 19; row++)
     {
-        for(int low = 0; low <= 69; low++)
-        {
-            array -> array[col][low] = EMPTY;
-        }
+        for(int col = 0; col <= 69; col++)
+            array -> array[row][col] = EMPTY;    //0~69(총 70)을 빈칸으로 채움
 
-        array -> array[col][70] = '\n';
+        array -> array[row][70] = '\n';    //71번 칸을 \n으로 저장
     }
-}
-
-void load_file()
-{
-    FILE* loading_file;
-    char
 }
 
 int main() {
@@ -171,7 +124,7 @@ int main() {
         while(true)
         {
             printf("\n             사용할 기능을 선택해주세요.\n");
-            printf("1.그리기 2.지우기 3.저장하기 4.불러오기 5.새 화면 6.종료\n");
+            printf("1.그리기 2.지우기 3.저장하기 4.새 화면 5.종료\n");
 
             scanf(" %c", &mode_select);
 
@@ -207,24 +160,19 @@ int main() {
 
             else if (mode_select == '4')
             {
-                printf("불러오기 만들기");
-            }
-
-            else if (mode_select == '5')
-            {
                 initialize(&setting);
                 break;
             }
 
-            else if (mode_select == '6')
-                break;
+            else if (mode_select == '5')
+                exit(2);
 
             else
+            {
                 printf("잘못된 입력입니다. 다시 입력해주세요.\n");
+                break;
+            }
         }
-
-        if(mode_select == '6')
-            break;
 
         system("cls");
     }
